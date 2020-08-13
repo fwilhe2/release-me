@@ -1,0 +1,17 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+  repository_dispatch:
+    types: changeme
+  schedule:
+    - cron:  '0 * * * *'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: get timestamp
+      id: time
+      run: 'date -u +"%Y-%m-%dT%H-%M-%S%Z"'
+    - run: echo ${{ steps.time.output }}
