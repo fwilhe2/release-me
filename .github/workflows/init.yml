@@ -14,4 +14,4 @@ jobs:
     - name: get timestamp
       id: time
       run: 'date -u +"%Y-%m-%dT%H-%M-%S%Z"'
-    - run: echo ${{ steps.time.output }}
+    - run: echo ${{ steps.time.outputs }}
