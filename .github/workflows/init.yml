@@ -10,8 +10,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: get timestamp
-      id: time
-      run: echo "::set-output name=action_fruit::`date -u +\"%Y-%m-%dT%H-%M-%S%Z\"`"
-    - run: echo ${{ steps.time.outputs.action_fruit }}
+      - uses: actions/checkout@v2
+      - name: get timestamp
+        id: time
+        run: echo "::set-output name=action_fruit::`date -u +\"%Y-%m-%dT%H-%M-%S%Z\"`"
+      - run: echo ${{ steps.time.outputs.action_fruit }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.time.outputs.action_fruit }}
+      - run: zip -r foo.zip .
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./foo.zip
+          asset_content_type: application/zip
