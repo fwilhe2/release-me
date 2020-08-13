@@ -13,5 +13,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: get timestamp
       id: time
-      run: 'date -u +"%Y-%m-%dT%H-%M-%S%Z"'
-    - run: echo ${{ steps.time.outputs.output }}
+      run: echo "::set-output name=action_fruit::`date -u +\"%Y-%m-%dT%H-%M-%S%Z\"`"
+    - run: echo ${{ steps.time.outputs.action_fruit }}
